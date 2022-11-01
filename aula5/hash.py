@@ -24,6 +24,20 @@ def main(args):
     print_hash(hashed_data)
     print_hash(flipped_bit_hashed_data)
 
+    s= similarity(hashed_data, flipped_bit_hashed_data)
+    print(s)
+
+
+def bitwise_xor_bytes(a, b): # python nao suporta bitwise operations com bytes lmao
+    result_int = int.from_bytes(a, byteorder="big") ^ int.from_bytes(b, byteorder="big")
+    return result_int.to_bytes(max(len(a), len(b)), byteorder="big")
+
+def similarity(hash1, hash2):
+    hamming_distance= len(set(bitwise_xor_bytes(hash1, hash2))) # number of different bits
+    print('hamming_distance', hamming_distance)
+    jaccard_index= (len(hash1) - hamming_distance) / len(hash1)
+
+    return jaccard_index
 
 
 def flip_bit(data):
