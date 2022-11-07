@@ -1,5 +1,7 @@
+import random
 import sys
 import hash as h
+from cryptography.hazmat.primitives import hashes
 import os
 
 def main(args):
@@ -10,16 +12,26 @@ def main(args):
 
     messages= new_messages(data, n)
 
-    avg_similarity= compare(messages, bytearray(data))
+    hashed_messages= hash_array(messages)
+
+    avg_similarity= compare(hashed_messages, bytearray(data))
 
     print(avg_similarity)
 
+
+def hash_array(array):
+    hashed_array= []
+    for i in range(len(array)):
+        hashed_data= h.hash_data(array[i], hashes.SHA256())
+        hashed_array.append(hashed_data)
+    return hashed_array
 
 
 def compare(messages, original):
     avg_similarity= 0
     for m in messages:
         s= h.similarity(original, m)
+        #print("similarity: ", s)
         avg_similarity+= s
     return avg_similarity / len(messages)
 
@@ -31,14 +43,20 @@ def read_file(file_name):
         return data
 
 def new_messages(data, n):
-    array_data= bytearray(data)
-    size= len(array_data)
-    messages= [array_data]
+    original_data= bytearray(data)
+    size= len(original_data)
+    messages= [original_data]
     for i in range(0, n):
-        new_array= array_data
-        ind = int.from_bytes(os.urandom(size), "big")
-        new_array[0]= array_data[0] ^ (1 << ind)
-        messages.appen(new_array)
+        new_data= original_data[:]
+        random_byte_index= random.randint(0, size-1)
+        new_data[random_byte_index]= new_data[random_byte_index] ^ 0x80
+        #byte= new_data[random_byte_index]
+        #random_bit_index= random.randint(0, 7)
+        #print((original_data))
+        #byte[random_bit_index]= (byte[random_bit_index] + 1)%2 # flip bit
+        #new_data[random_byte_index]= byte
+        messages.append(new_data)
+        #print(new_data, '\n')
     return messages
 
 

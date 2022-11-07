@@ -34,7 +34,7 @@ def bitwise_xor_bytes(a, b): # python nao suporta bitwise operations com bytes l
 
 def similarity(hash1, hash2):
     hamming_distance= len(set(bitwise_xor_bytes(hash1, hash2))) # number of different bits
-    print('hamming_distance', hamming_distance)
+    #print('hamming_distance', hamming_distance)
     jaccard_index= (len(hash1) - hamming_distance) / len(hash1)
 
     return jaccard_index
