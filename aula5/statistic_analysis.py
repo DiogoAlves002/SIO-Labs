@@ -31,7 +31,7 @@ def compare(messages, original):
     avg_similarity= 0
     for m in messages:
         s= h.similarity(original, m)
-        #print("similarity: ", s)
+        print("similarity: ", s)
         avg_similarity+= s
     return avg_similarity / len(messages)
 

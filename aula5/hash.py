@@ -1,7 +1,7 @@
 import sys
 
 from cryptography.hazmat.primitives import hashes
-
+import numpy as np
 
 def main(args):
 
@@ -33,7 +33,10 @@ def bitwise_xor_bytes(a, b): # python nao suporta bitwise operations com bytes l
     return result_int.to_bytes(max(len(a), len(b)), byteorder="big")
 
 def similarity(hash1, hash2):
-    hamming_distance= len(set(bitwise_xor_bytes(hash1, hash2))) # number of different bits
+    xor= bitwise_xor_bytes(hash1, hash2)
+    return np.count_nonzero(xor) / len(xor)
+    #return bin(bitwise_xor_bytes(hash1, hash2)[:2]).ljust(32*8, '0').count('0')
+    # hamming_distance= len(set(bitwise_xor_bytes(hash1, hash2))) # number of different bits
     #print('hamming_distance', hamming_distance)
     jaccard_index= (len(hash1) - hamming_distance) / len(hash1)
 
